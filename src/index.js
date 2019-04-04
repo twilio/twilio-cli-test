@@ -31,6 +31,13 @@ async function createCommand(ctx, CommandClass, args) {
   });
 }
 
+function clearEnvironmentVars() {
+  delete process.env.TWILIO_ACCOUNT_SID;
+  delete process.env.TWILIO_AUTH_TOKEN;
+  delete process.env.TWILIO_API_KEY;
+  delete process.env.TWILIO_API_SECRET;
+}
+
 const twilioTest = test
   .register('twilioCliEnv', Config => {
     return {
@@ -77,7 +84,7 @@ const twilioTest = test
         await ctx.testCmd.run();
       }
     };
-  });
+  }).do(clearEnvironmentVars);
 
 module.exports = {
   expect,
