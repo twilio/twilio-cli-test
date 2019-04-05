@@ -32,10 +32,9 @@ async function createCommand(ctx, CommandClass, args) {
 }
 
 function clearEnvironmentVars() {
-  delete process.env.TWILIO_ACCOUNT_SID;
-  delete process.env.TWILIO_AUTH_TOKEN;
-  delete process.env.TWILIO_API_KEY;
-  delete process.env.TWILIO_API_SECRET;
+  Object.keys(process.env)
+    .filter(k => k.startsWith('TWILIO_'))
+    .forEach(k => delete process.env[k]);
 }
 
 const twilioTest = test
