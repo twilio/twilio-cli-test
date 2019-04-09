@@ -27,7 +27,8 @@ async function createCommand(ctx, CommandClass, args) {
       };
     },
 
-    saveCredentials: sinon.fake.resolves(true)
+    saveCredentials: sinon.fake.resolves(true),
+    storageLocation: 'libsecret'
   });
 }
 
@@ -83,7 +84,8 @@ const twilioTest = test
         await ctx.testCmd.run();
       }
     };
-  }).do(clearEnvironmentVars);
+  })
+  .do(clearEnvironmentVars);
 
 module.exports = {
   expect,
