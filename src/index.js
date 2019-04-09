@@ -19,7 +19,7 @@ const constants = {
 };
 
 async function createCommand(ctx, CommandClass, args) {
-  ctx.testCmd = new CommandClass(args, ctx.fakeConfig, {
+  const fakeSecureStorage = {
     async getCredentials(projectId) {
       return {
         apiKey: constants.FAKE_API_KEY,
@@ -27,8 +27,10 @@ async function createCommand(ctx, CommandClass, args) {
       };
     },
 
-    saveCredentials: sinon.fake.resolves(true)
-  });
+    saveCredentials: sinon.fake.resolves(true),
+    storageLocation: 'libsecret'
+  };
+  ctx.testCmd = new CommandClass(args, ctx.fakeConfig, fakeSecureStorage);
 }
 
 function clearEnvironmentVars() {
@@ -83,7 +85,8 @@ const twilioTest = test
         await ctx.testCmd.run();
       }
     };
-  }).do(clearEnvironmentVars);
+  })
+  .do(clearEnvironmentVars);
 
 module.exports = {
   expect,
