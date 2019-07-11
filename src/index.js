@@ -3,6 +3,8 @@ const OclifConfig = require('@oclif/config');
 const { expect, test } = require('@oclif/test');
 const tmp = require('tmp');
 
+require('chai').use(require('chai-as-promised'));
+
 function getFakeSid(prefix) {
   return (
     prefix
@@ -35,7 +37,7 @@ async function createCommand(ctx, CommandClass, args) {
 
 function clearEnvironmentVars() {
   Object.keys(process.env)
-    .filter(k => k.startsWith('TWILIO_'))
+    .filter(k => k.match(/^(TWILIO|SENDGRID)_/))
     .forEach(k => delete process.env[k]);
 }
 
