@@ -5,10 +5,11 @@
   "author": "Twilio @twilio",
   "bugs": "https://github.com/twilio/twilio-cli/issues",
   "dependencies": {
-    "@oclif/command": "^1.5.13",
-    "@oclif/config": "^1.12.12",
+    "@oclif/command": "^1.5.16",
+    "@oclif/config": "^1.13.1",
     "@oclif/test": "^1.1.0",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "nock": "^10.0.6",
     "sinon": "^6.3.4",
     "tmp": "0.0.33"
@@ -25,8 +26,6 @@
   },
   "files": [
     "/bin",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
     "/src"
   ],
   "homepage": "https://github.com/twilio/twilio-cli-test",
