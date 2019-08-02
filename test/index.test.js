@@ -11,8 +11,8 @@ class FakeConfig {
 }
 
 class FakeConfigData {
-  addProject(projectId, accountSid) {
-    this.projectId = projectId;
+  addProfile(profileId, accountSid) {
+    this.profileId = profileId;
     this.accountSid = accountSid;
   }
 }
@@ -54,12 +54,12 @@ describe('test', () => {
       });
   });
 
-  describe('twilioFakeProject', () => {
+  describe('twilioFakeProfile', () => {
     test
-      .twilioFakeProject(FakeConfigData)
+      .twilioFakeProfile(FakeConfigData)
       .twilioCliEnv(FakeConfig)
-      .it('should add a mock default project', ctx => {
-        expect(ctx.userConfig.projectId).to.equal('default');
+      .it('should add a mock default profile', ctx => {
+        expect(ctx.userConfig.profileId).to.equal('default');
         expect(ctx.userConfig.accountSid).to.include('AC');
       });
   });
