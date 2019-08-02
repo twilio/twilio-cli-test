@@ -22,10 +22,10 @@ const constants = {
 
 async function createCommand(ctx, CommandClass, args) {
   const fakeSecureStorage = {
-    async getCredentials(projectId) {
+    async getCredentials(profileId) {
       return {
         apiKey: constants.FAKE_API_KEY,
-        apiSecret: constants.FAKE_API_SECRET + projectId
+        apiSecret: constants.FAKE_API_SECRET + profileId
       };
     },
 
@@ -65,11 +65,11 @@ const twilioTest = test
       }
     };
   })
-  .register('twilioFakeProject', ConfigData => {
+  .register('twilioFakeProfile', ConfigData => {
     return {
       run(ctx) {
         ctx.userConfig = new ConfigData();
-        ctx.userConfig.addProject('default', constants.FAKE_ACCOUNT_SID);
+        ctx.userConfig.addProfile('default', constants.FAKE_ACCOUNT_SID);
       }
     };
   })
