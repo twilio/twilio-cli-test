@@ -41,6 +41,7 @@ function clearEnvironmentVars() {
     .forEach(k => delete process.env[k]);
 }
 
+/* eslint-disable require-atomic-updates */
 const twilioTest = test
   .register('twilioCliEnv', Config => {
     return {
