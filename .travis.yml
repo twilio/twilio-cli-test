@@ -11,5 +11,4 @@ notifications:
     on_pull_requests: false
     on_success: never
     on_failure: change
-    rooms:
-      - secure: LiAy2JE/cMjOOehNPuwy9RT+MDbBfWTlXthykRZEjcbmRQLJOycODjeMvurj4bG1caEV0toCxgZ0t6JePTIQro5fiRRMSFGvVFA91KFCSqRDyOAh511KNdtGzyf5xj1+Grc34IPUu9oH9c8eWO7c+SzbbFmCCg7YfOY0UZKAM5SP6aMDUcEgfw6TjTo15Nx8B/QQR3NRnuyvvW4HOCoq+naXLdPkJBCLMnfkBNzdrfKXHo9NlT7Q5qInZnKbsXG6MXldRAOZC8Mg4xTC1qln/jtm3gR0fOvcMK/EbNWfoFv9XkP/XBlAW+3VpEdr7RjjcGzCwqGMsS322Uf8vEZnAiOoYlG8sEW539q/lPkrC0TjGGpJgSk/e/YJ1ndKvOz9Fhr0cmJ8MxQm2iUj0IwZbYVOe0FwE3dAyqesnXCH+B28uYxjm3EZ+TRUEN5WNn5ghzF3Fbpo3zUrWgoxdopYr3v7XWH8xcP1ZpJ+SLAQV2bpzX54Ign6LlP2eq9h13le6nGeQSO2apyZ80zhufd5Z13gPfMRbdKSnW5bIOmw5aelVNJW9UhB9HnCw4y+fQO3Wptvs8CQC1VsDqmwBlVT9IbiBMPSmv9+Ga6clGuE9eV4F4HkEUXHPFJZMfIqaWM5QPr+GkqI6sQSF2GsqQSozeN2PPYfiKiJvmsl3PsqcQg=
+    rooms: $SLACK_TOKEN
