@@ -15,6 +15,10 @@ class FakeConfigData {
     this.profileId = profileId;
     this.accountSid = accountSid;
   }
+
+  setActiveProfile(profileId) {
+    this.activeProfile = profileId;
+  }
 }
 
 class FakeCommand {
@@ -58,9 +62,10 @@ describe('test', () => {
     test
       .twilioFakeProfile(FakeConfigData)
       .twilioCliEnv(FakeConfig)
-      .it('should add a mock default profile', ctx => {
+      .it('should add a mock default profile and set as active', ctx => {
         expect(ctx.userConfig.profileId).to.equal('default');
         expect(ctx.userConfig.accountSid).to.include('AC');
+        expect(ctx.userConfig.activeProfile).to.equal('default');
       });
   });
 
