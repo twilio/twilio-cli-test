@@ -71,6 +71,7 @@ const twilioTest = test
       run(ctx) {
         ctx.userConfig = new ConfigData();
         ctx.userConfig.addProfile('default', constants.FAKE_ACCOUNT_SID);
+        ctx.userConfig.setActiveProfile('default');
       }
     };
   })
