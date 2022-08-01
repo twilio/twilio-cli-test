@@ -22,17 +22,15 @@ const constants = {
 
 async function createCommand(ctx, CommandClass, args) {
   ctx.testCmd = new CommandClass(args, ctx.fakeConfig);
-  ctx.testCmd.secureStorage = {
-    async getCredentials(profileId) {
+  if (ctx.testCmd.userConfig) {
+    sinon.replace(ctx.testCmd.userConfig, 'getProfileById', profileId => {
       return {
+        id: constants.FAKE_ACCOUNT_SID,
         apiKey: constants.FAKE_API_KEY,
         apiSecret: constants.FAKE_API_SECRET + profileId
       };
-    },
-
-    saveCredentials: sinon.fake.resolves(true),
-    storageLocation: 'libsecret'
-  };
+    });
+  }
 }
 
 function clearEnvironmentVars() {
@@ -70,7 +68,7 @@ const twilioTest = test
     return {
       run(ctx) {
         ctx.userConfig = new ConfigData();
-        ctx.userConfig.addProfile('default', constants.FAKE_ACCOUNT_SID);
+        ctx.userConfig.addProfile('default', constants.FAKE_ACCOUNT_SID, undefined, constants.FAKE_API_KEY, `${constants.FAKE_API_SECRET}default`);
         ctx.userConfig.setActiveProfile('default');
       }
     };
