@@ -22,11 +22,15 @@ class FakeConfigData {
 }
 
 class FakeCommand {
-  constructor(args, config, secureStorage) {
+  constructor(args, config) {
     this.args = args;
     this.config = config;
-    this.secureStorage = secureStorage;
     this.ran = false;
+    this.userConfig = {
+      getProfileById() {
+        return false;
+      }
+    };
   }
 
   async run() {
@@ -74,7 +78,7 @@ describe('test', () => {
       .twilioCliEnv(FakeConfig)
       .twilioCreateCommand(FakeCommand, [])
       .it('should create the command class', async ctx => {
-        const creds = await ctx.testCmd.secureStorage.getCredentials('default');
+        const creds = await ctx.testCmd.userConfig.getProfileById('default');
         expect(creds.apiKey).to.contain('SK');
         expect(ctx.testCmd.ran).to.be.false;
       });
@@ -85,7 +89,7 @@ describe('test', () => {
       .twilioCliEnv(FakeConfig)
       .twilioCommand(FakeCommand, [])
       .it('should create the command class and run the command', async ctx => {
-        const creds = await ctx.testCmd.secureStorage.getCredentials('default');
+        const creds = await ctx.testCmd.userConfig.getProfileById('default');
         expect(creds.apiKey).to.contain('SK');
         expect(ctx.testCmd.ran).to.be.true;
       });
