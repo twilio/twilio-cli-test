@@ -5,9 +5,8 @@
   "author": "Twilio @twilio",
   "bugs": "https://github.com/twilio/twilio-cli/issues",
   "dependencies": {
-    "@oclif/command": "^1.7.0",
-    "@oclif/config": "^1.16.0",
-    "@oclif/test": "^1.2.6",
+    "@oclif/core": "^1.16.0",
+    "@oclif/test": "^2.1.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "nock": "^13.0.2",

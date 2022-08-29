@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const OclifConfig = require('@oclif/config');
+const { Config: OclifConfig } = require('@oclif/core');
 const { expect, test } = require('@oclif/test');
 const tmp = require('tmp');
 
