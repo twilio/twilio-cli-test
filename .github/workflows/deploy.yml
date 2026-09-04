@@ -6,11 +6,15 @@ name: Deploy
 #      `npm version <patch|minor|major> --no-git-tag-version`) and merge it
 #      to main through the normal review process.
 #   2. Once merged, create and push a tag matching that version
-# That tag push is what triggers this workflow
+# That tag push is what triggers a release. workflow_dispatch is also
+# available to run the test/lockfile-hygiene jobs on demand - publish still
+# only runs when github.ref_type == 'tag', so a manual dispatch off a branch
+# never publishes.
 on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
 
 env:
   ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
@@ -82,7 +86,7 @@ jobs:
       - name: Create GitHub Release
         uses: sendgrid/dx-automator/actions/release@08b601b726671445abc798ed59881766ec8fefc6
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       # Tag must be a bare version (no v-prefix) and match package.json exactly,
       # since this run is triggered directly by the tag push.
