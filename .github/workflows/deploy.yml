@@ -1,0 +1,87 @@
+name: Deploy
+
+# cli-test has no release schedule; it ships when a maintainer manually
+# completes two steps BEFORE this workflow runs:
+#   1. Open a PR that bumps the version in package.json (e.g. via
+#      `npm version <patch|minor|major> --no-git-tag-version`) and merge it
+#      to main through the normal review process.
+#   2. Once merged, create and push a tag matching that version
+# That tag push is what triggers this workflow
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
+
+jobs:
+  test:
+    if: github.repository_owner == 'twilio'
+    runs-on: ubuntu-x64
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      matrix:
+        node-version: ['22.x', 'lts/*']
+    steps:
+      - name: Checkout cli-test repo
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Artifactory OIDC Auth
+        uses: twilio/sdk-actions/artifactory-oidc@23b656b843d2a3461cf38e4fd466c07a822d5fc0 # v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: make install
+      - run: make test
+
+  publish:
+    name: Publish to npm
+    needs: [test]
+    runs-on: ubuntu-x64
+    if: success() && github.ref_type == 'tag' && github.repository_owner == 'twilio'
+    # Gate: configure required reviewers on this environment in repo settings.
+    environment:
+      name: npm-publish
+      url: https://www.npmjs.com/package/@twilio/cli-test/v/${{ github.ref_name }}
+    permissions:
+      contents: write   # create the GitHub Release
+      id-token: write   # artifactory OIDC and npm OIDC trusted publishing
+    steps:
+      - name: Checkout cli-test repo
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Artifactory OIDC Auth
+        uses: twilio/sdk-actions/artifactory-oidc@23b656b843d2a3461cf38e4fd466c07a822d5fc0 # v1
+
+      # Node 24+ required for npm OIDC trusted publisher support (npm >= 11.5.1)
+      - name: Use Node 24
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24
+
+      - run: make install
+
+      - name: Get tagged version
+        run: echo "GITHUB_TAG=${GITHUB_REF#refs/*/}" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        uses: sendgrid/dx-automator/actions/release@08b601b726671445abc798ed59881766ec8fefc6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tag must be a bare version (no v-prefix) and match package.json exactly,
+      # since this run is triggered directly by the tag push.
+      - name: Validate tag + publish to npm
+        uses: twilio/sdk-actions/npm-publish@0375437914d535a5fb178bdbfdb5d51bdde2616e # v1
+        with:
+          registry: 'https://registry.npmjs.org'
+          validate-tag: 'true'
+          tag-prefix: ''
+          access: 'public'
+          provenance: 'true'
