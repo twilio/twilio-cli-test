@@ -16,7 +16,16 @@ env:
   ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
 
 jobs:
+  lockfile-hygiene:
+    runs-on: ubuntu-x64
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: twilio/sdk-actions/npm-lockfile-hygiene@0375437914d535a5fb178bdbfdb5d51bdde2616e # v1
+        with:
+          package-manager: npm
+
   test:
+    needs: [lockfile-hygiene]
     if: github.repository_owner == 'twilio'
     runs-on: ubuntu-x64
     permissions:
