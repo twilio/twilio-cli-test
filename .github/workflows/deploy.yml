@@ -83,10 +83,10 @@ jobs:
       - name: Get tagged version
         run: echo "GITHUB_TAG=${GITHUB_REF#refs/*/}" >> "$GITHUB_ENV"
 
-      - name: Create GitHub Release
-        uses: sendgrid/dx-automator/actions/release@08b601b726671445abc798ed59881766ec8fefc6
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+#      - name: Create GitHub Release
+#        uses: sendgrid/dx-automator/actions/release@08b601b726671445abc798ed59881766ec8fefc6
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       # Tag must be a bare version (no v-prefix) and match package.json exactly,
       # since this run is triggered directly by the tag push.
